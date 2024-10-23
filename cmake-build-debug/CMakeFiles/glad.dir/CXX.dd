@@ -1,0 +1,5 @@
+ninja_dyndep_version = 1.0
+build CMakeFiles/glad.dir/shader/Shader.cpp.o: dyndep
+
+build CMakeFiles/glad.dir/shader/ShaderProgram.cpp.o: dyndep
+

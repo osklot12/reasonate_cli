@@ -1,0 +1,21 @@
+{
+	"bmi-installation" : null,
+	"compiler-frontend-variant" : "GNU",
+	"compiler-id" : "GNU",
+	"compiler-simulate-id" : "",
+	"config" : "Debug",
+	"cxx-modules" : {},
+	"dir-cur-bld" : "/home/osklot12/code/reasonate_cli/cmake-build-debug",
+	"dir-cur-src" : "/home/osklot12/code/reasonate_cli",
+	"dir-top-bld" : "/home/osklot12/code/reasonate_cli/cmake-build-debug",
+	"dir-top-src" : "/home/osklot12/code/reasonate_cli",
+	"exports" : [],
+	"forward-modules-from-target-dirs" : [],
+	"include-dirs" : 
+	[
+		"/home/osklot12/code/reasonate_cli/libs/include"
+	],
+	"language" : "CXX",
+	"linked-target-dirs" : [],
+	"module-dir" : "/home/osklot12/code/reasonate_cli/cmake-build-debug/CMakeFiles/reasonate_cli.dir"
+}
