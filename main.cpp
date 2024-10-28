@@ -8,6 +8,16 @@
 
 #include "shader/ShaderProgram.h"
 #include "util/FileUtil.h"
+#define STB_IMAGE_IMPLEMENTATION
+#include "util/stb_image.h"
+
+constexpr unsigned int SCR_WIDTH = 800;
+constexpr unsigned int SCR_HEIGHT = 600;
+
+constexpr char* WINDOW_TITLE = "Reasonate";
+
+const std::string VERTEX_CODE_PATH = "../shader/shader_src/shader.vs";
+const std::string FRAGMENT_CODE_PATH = "../shader/shader_src/shader.fs";
 
 void processInput(GLFWwindow *window) {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
@@ -21,7 +31,7 @@ int main() {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    GLFWwindow *window = glfwCreateWindow(800, 600, "Reasonate", NULL, NULL);
+    GLFWwindow *window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, WINDOW_TITLE, NULL, NULL);
     if (window == NULL) {
         std::cout << "Failed to create GLFW window." << std::endl;
         glfwTerminate();
@@ -40,32 +50,26 @@ int main() {
         glViewport(0, 0, width, height);
     });
 
-    std::array<float, 18> vertices = {
-        // positions        // colors
-        -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom right
-        0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, // bottom left
-        0.0f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f // top
-    };
-
-    std::array<float, 12> in_vertices = {
-        0.5f, 0.5f, 0.0f,
-        0.5f, -0.5f, 0.0f,
-        -0.5f, -0.5f, 0.0f,
-        -0.5f, 0.5f, 0.0f
-    };
-    std::array<int, 6> indices = {
-        0, 1, 3,
-        1, 2, 3
-    };
-
-    const std::string vertex_code = FileUtil::read_file("../shader/shader_src/shader.vs");
-    const std::string fragment_code = FileUtil::read_file("../shader/shader_src/shader.fs");
+    const std::string vertex_code = FileUtil::read_file(VERTEX_CODE_PATH);
+    const std::string fragment_code = FileUtil::read_file(FRAGMENT_CODE_PATH);
 
     const Shader vertex_shader(vertex_code, SHADER_TYPE::VERTEX);
     const Shader fragment_shader(fragment_code, SHADER_TYPE::FRAGMENT);
 
     const ShaderProgram shader_program(vertex_shader, fragment_shader);
-    shader_program.use();
+
+    constexpr std::array<float, 32> vertices = {
+        // positions        // colors
+         0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+         0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+        -0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f // top left
+    };
+
+    constexpr std::array<int, 6> indices = {
+        0, 1, 3,
+        1, 2, 3
+    };
 
     unsigned int EBO;
     glGenBuffers(1, &EBO);
@@ -86,33 +90,58 @@ int main() {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices.data(), GL_STATIC_DRAW);
     // position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *) 0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *) 0);
     glEnableVertexAttribArray(0);
     // color attribute
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
+    // texture attribute
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(6 * sizeof(float)));
+    glEnableVertexAttribArray(2);
 
-    // checking max vertex attributes
-    int nrAttributes;
-    glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &nrAttributes);
-    std::cout << "Maximum number of vertex attributes: " << nrAttributes << std::endl;
+    // generate texture
+    unsigned int texture;
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+
+    // texture wrapping parameters
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+    // texture filtering parameters
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    // loading texture
+    int width, height, nrChannels;
+    unsigned char *data = stbi_load("../texture/texture/container.jpg", &width, &height, &nrChannels, 0);
+    if (data) {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+    } else {
+        std::cout << "Could not load texture" << std::endl;
+    }
+
+    // free image memory
+    stbi_image_free(data);
+
 
     while (!glfwWindowShouldClose(window)) {
+        // input
         processInput(window);
 
+        // render
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
+        // bind texture
+        glBindTexture(GL_TEXTURE_2D, texture);
+
+        // render container
         shader_program.use();
-
-        // using a uniform to change color
-        float timeValue = glfwGetTime();
-        float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
-        int vertexColorLocation = glGetUniformLocation(shader_program.get_id(), "ourColor");
-        glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
-
         glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+        // glDrawArrays(GL_TRIANGLES, 0, 3);
 
         glfwSwapBuffers(window);
         glfwPollEvents();

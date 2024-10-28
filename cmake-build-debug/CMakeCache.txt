@@ -257,12 +257,6 @@ OPENGL_opengl_LIBRARY:FILEPATH=/usr/lib/libOpenGL.so
 //Path to a file.
 OPENGL_xmesa_INCLUDE_DIR:PATH=OPENGL_xmesa_INCLUDE_DIR-NOTFOUND
 
-//Path to a file.
-OpenCL_INCLUDE_DIR:PATH=OpenCL_INCLUDE_DIR-NOTFOUND
-
-//Path to a library.
-OpenCL_LIBRARY:FILEPATH=/usr/lib/libOpenCL.so
-
 //The directory containing a CMake configuration file for glfw3.
 glfw3_DIR:PATH=/usr/lib/cmake/glfw3
 
@@ -429,20 +423,6 @@ FIND_PACKAGE_MESSAGE_DETAILS_GTest:INTERNAL=[/usr/lib/cmake/GTest/GTestConfig.cm
 FIND_PACKAGE_MESSAGE_DETAILS_OpenGL:INTERNAL=[/usr/lib/libOpenGL.so][/usr/lib/libGLX.so][/usr/include][c ][v()]
 //Details about finding Threads
 FIND_PACKAGE_MESSAGE_DETAILS_Threads:INTERNAL=[TRUE][v()]
-//Have symbol CL_VERSION_1_0
-OPENCL_VERSION_1_0:INTERNAL=
-//Have symbol CL_VERSION_1_1
-OPENCL_VERSION_1_1:INTERNAL=
-//Have symbol CL_VERSION_1_2
-OPENCL_VERSION_1_2:INTERNAL=
-//Have symbol CL_VERSION_2_0
-OPENCL_VERSION_2_0:INTERNAL=
-//Have symbol CL_VERSION_2_1
-OPENCL_VERSION_2_1:INTERNAL=
-//Have symbol CL_VERSION_2_2
-OPENCL_VERSION_2_2:INTERNAL=
-//Have symbol CL_VERSION_3_0
-OPENCL_VERSION_3_0:INTERNAL=
 //ADVANCED property for variable: OPENGL_EGL_INCLUDE_DIR
 OPENGL_EGL_INCLUDE_DIR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: OPENGL_GLES2_INCLUDE_DIR

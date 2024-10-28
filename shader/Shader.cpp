@@ -39,7 +39,7 @@ GLuint Shader::get_id() const {
     return id;
 }
 
-void Shader::compile(const std::string &source_code) {
+void Shader::compile(const std::string &source_code) const {
     const char *code = source_code.c_str();
     glShaderSource(id, 1, &code, NULL);
     glCompileShader(id);

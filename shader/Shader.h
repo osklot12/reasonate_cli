@@ -27,7 +27,7 @@ public:
 private:
     GLuint id;
     SHADER_TYPE type;
-    void compile(const std::string &source_code);
+    void compile(const std::string &source_code) const;
 };
 
 

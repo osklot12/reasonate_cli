@@ -12,6 +12,7 @@ add_library(glad libs/src/glad.c
         shader/Shader.h
         shader/ShaderProgram.cpp
         shader/ShaderProgram.h
+        util/stb_image.h
 )
 
 find_package(OpenGL REQUIRED)
