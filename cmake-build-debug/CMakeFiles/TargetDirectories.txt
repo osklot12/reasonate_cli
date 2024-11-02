@@ -1,4 +1,0 @@
-/home/osklot12/code/reasonate_cli/cmake-build-debug/CMakeFiles/glad.dir
-/home/osklot12/code/reasonate_cli/cmake-build-debug/CMakeFiles/reasonate_cli.dir
-/home/osklot12/code/reasonate_cli/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/osklot12/code/reasonate_cli/cmake-build-debug/CMakeFiles/rebuild_cache.dir
