@@ -58,6 +58,7 @@ int main() {
     const Shader fragment_shader(fragment_code, SHADER_TYPE::FRAGMENT);
 
     const ShaderProgram shader_program(vertex_shader, fragment_shader);
+    shader_program.use();
 
     constexpr std::array<float, 32> vertices = {
         // positions        // colors
@@ -100,7 +101,11 @@ int main() {
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(6 * sizeof(float)));
     glEnableVertexAttribArray(2);
 
-    Texture texture("../texture/texture/container.jpg");
+    Texture tex_container("../texture/texture/container.jpg");
+    Texture tex_face("../texture/texture/awesomeface.png");
+
+    shader_program.set_int("texture1", 0);
+    shader_program.set_int("texture2", 1);
 
     // activating texture unit
     // glActiveTexture(GL_TEXTURE0);
@@ -115,7 +120,8 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT);
 
         // bind texture
-        texture.bind();
+        tex_container.bind_to_unit(GL_TEXTURE0);
+        tex_face.bind_to_unit(GL_TEXTURE1);
 
         // render container
         shader_program.use();

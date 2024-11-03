@@ -18,7 +18,14 @@ Texture::Texture(const std::string &path, const GLenum target)
     unbind();
 }
 
+void Texture::bind_to_unit(const
+    GLenum unit) const {
+    gl_texture.bind_to_unit(unit);
+}
+
+
 unsigned char* Texture::load_image() {
+    stbi_set_flip_vertically_on_load(true);
     return stbi_load(path.c_str(), &width, &height, &nr_channels, 0);
 }
 

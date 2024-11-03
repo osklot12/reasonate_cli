@@ -3,10 +3,18 @@ project(reasonate_cli)
 
 set(CMAKE_CXX_STANDARD 20)
 
-include_directories(libs/include)
-include_directories(${GTEST_INCLUDE_DIRS})
+# enable testing
+enable_testing()
 
-add_library(glad libs/src/glad.c
+# add glad to the project
+include_directories(libs/glad/include)
+add_library(glad libs/glad/src/glad.c)
+
+# add google test to the project
+add_subdirectory(libs/googletest)
+
+# project's core library
+add_library(reasonate_lib
         util/FileUtil.h
         shader/Shader.cpp
         shader/Shader.h
@@ -17,14 +25,23 @@ add_library(glad libs/src/glad.c
         texture/Texture.h
         texture/GLTexture.cpp
         texture/GLTexture.h
+        shader/GLShader.cpp
+        shader/GLShader.h
+        test/texture_test.cpp
+        test/test_main.cpp
 )
 
+# link external libraries
 find_package(OpenGL REQUIRED)
 find_package(glfw3 REQUIRED)
-find_package(GTest REQUIRED)
 
+# main executable
+add_executable(reasonate_cli main.cpp)
+target_link_libraries(reasonate_cli reasonate_lib glad glfw OpenGL::GL pthread)
 
-add_executable(reasonate_cli main.cpp
-)
+# test executable
+add_executable(reasonate_cli_tests test/texture_test.cpp)
+target_link_libraries(reasonate_cli_tests reasonate_lib GTest::gtest GTest::gtest_main)
 
-target_link_libraries(reasonate_cli glad glfw OpenGL::GL ${GTEST_LIBRARIES} pthread)
+# register test with CTest
+add_test(NAME ReasonateTests COMMAND reasonate_cli_tests)

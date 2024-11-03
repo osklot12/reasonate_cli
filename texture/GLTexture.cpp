@@ -18,3 +18,8 @@ void GLTexture::bind() const {
 void GLTexture::unbind() const {
     glBindTexture(target, 0);
 }
+
+void GLTexture::bind_to_unit(const GLenum unit) const {
+    glActiveTexture(unit);
+    bind();
+}

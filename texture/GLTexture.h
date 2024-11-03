@@ -17,6 +17,8 @@ public:
 
     void unbind() const;
 
+    void bind_to_unit(GLenum unit) const;
+
     GLuint get_id() const { return id; };
     GLenum get_target() const { return target; }
 

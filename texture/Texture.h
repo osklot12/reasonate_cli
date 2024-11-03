@@ -14,10 +14,11 @@ public:
     void load_texture(const std::string &path);
 
     Texture(const std::string &path, GLenum target = GL_TEXTURE_2D);
-    void bind() const { gl_texture.bind(); };
-    void unbind() const { gl_texture.unbind(); };
-    int get_width() const { return width; };
-    int get_height() const { return height; };
+    void bind() const { gl_texture.bind(); }
+    void unbind() const { gl_texture.unbind(); }
+    int get_width() const { return width; }
+    int get_height() const { return height; }
+    void bind_to_unit(GLenum unit) const;
     void set_texture_parameter(GLenum pname, GLint param) const;
     const std::string &get_path() const { return path; };
 private:
