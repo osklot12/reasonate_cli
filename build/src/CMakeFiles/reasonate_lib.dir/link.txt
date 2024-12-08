@@ -1,0 +1,2 @@
+/usr/bin/ar qc libreasonate_lib.a CMakeFiles/reasonate_lib.dir/graphics/shader/Shader.cpp.o CMakeFiles/reasonate_lib.dir/graphics/shader/GLShader.cpp.o CMakeFiles/reasonate_lib.dir/graphics/texture/Texture.cpp.o CMakeFiles/reasonate_lib.dir/graphics/texture/GLTexture.cpp.o
+/usr/bin/ranlib libreasonate_lib.a
