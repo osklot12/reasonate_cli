@@ -327,3 +327,26 @@ TEST(matrix_test, scale_matrix_reverse_order_success) {
         }
     }
 }
+
+// transposing a matrix should yield expected result
+TEST(matrix_test, transpose_success) {
+    const Matrix<int> mat{
+            {1, 2},
+            {3, 4},
+            {5, 6}
+    };
+    const size_t rows = mat.rows();
+    const size_t cols = mat.cols();
+    const auto trans = mat.t();
+
+    // expecting dimensions to swap
+    ASSERT_EQ(rows, trans.cols());
+    ASSERT_EQ(cols, trans.rows());
+
+    // expecting rows to become columns
+    for (size_t i = 0; i < rows; ++i) {
+        for (size_t j = 0; j < cols; ++j) {
+            ASSERT_EQ(mat.at(i, j), trans.at(j, i));
+        }
+    }
+}

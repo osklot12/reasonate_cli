@@ -135,8 +135,20 @@ public:
         return result *= scalar;
     }
 
+    // scales a copy of this matrix with some scalar in reverse order
     friend Matrix<T> operator*(const T scalar, const Matrix<T> &mat) {
         return mat * scalar;
+    }
+
+    // transpose matrix
+    Matrix t() const {
+        Matrix<T> result(n, m);
+        for (size_t i = 0; i < m; ++i) {
+            for (size_t j = 0; j < n; ++j) {
+                result.data[j][i] = data[i][j];
+            }
+        }
+        return result;
     }
 
     // returns the number of rows
