@@ -2,6 +2,9 @@
 #include <iostream>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include "graphics/shader/ShaderProgram.h"
 #include "util/FileUtil.h"
@@ -104,10 +107,6 @@ int main() {
     shader_program.set_int("texture1", 0);
     shader_program.set_int("texture2", 1);
 
-    // activating texture unit
-    // glActiveTexture(GL_TEXTURE0);
-    // glBindTexture(GL_TEXTURE_2D, texture);
-
     while (!glfwWindowShouldClose(window)) {
         // input
         process_input(window);
@@ -119,6 +118,15 @@ int main() {
         // bind texture
         tex_container.bind_to_unit(GL_TEXTURE0);
         tex_face.bind_to_unit(GL_TEXTURE1);
+
+        // rotate container based on the glfw time function
+        glm::mat4 trans = glm::mat4(1.0f);
+        trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f));
+        trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+        // query the location of the transformation uniform
+        unsigned int transformLoc = glGetUniformLocation(shader_program.get_id(), "transform");
+        // send the matrix data to the shaders
+        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
 
         // render container
         shader_program.use();
