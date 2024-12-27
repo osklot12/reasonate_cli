@@ -10,6 +10,9 @@ enable_testing()
 include_directories(libs/glad/include)
 add_library(glad libs/glad/src/glad.c)
 
+# add glm to the project
+include_directories(libs/glm)
+
 # add google test to the project
 add_subdirectory(libs/googletest)
 
