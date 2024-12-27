@@ -29,9 +29,15 @@ public:
     void set_int(const std::string &name, int value) const;
     void set_float(const std::string &name, float value) const;
 
+    // transformation setters
+    void set_model_matrix(const glm::mat4 &model) const;
+    void set_view_matrix(const glm::mat4 &view) const;
+    void set_projection_matrix(const glm::mat4 &proj) const;
 private:
     GLuint id;
+
     void link_program(const Shader& vertex_shader, const Shader& fragment_shader);
+    void set_mat4(const std::string &name, const glm::mat4 &mat) const;
 };
 
 

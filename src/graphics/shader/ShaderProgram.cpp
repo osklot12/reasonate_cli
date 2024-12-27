@@ -2,9 +2,10 @@
 // Created by osklot12 on 10/23/24.
 //
 
-#include "ShaderProgram.h"
-
 #include <stdexcept>
+#include <glm/gtc/type_ptr.hpp>
+
+#include "ShaderProgram.h"
 
 constexpr size_t LOG_SIZE = 512;
 
@@ -64,4 +65,24 @@ void ShaderProgram::set_int(const std::string &name, int value) const {
 
 void ShaderProgram::set_float(const std::string &name, float value) const {
     glUniform1f(glGetUniformLocation(id, name.c_str()), value);
+}
+
+void ShaderProgram::set_model_matrix(const glm::mat4 &model) const {
+    set_mat4("model", model);
+}
+
+void ShaderProgram::set_view_matrix(const glm::mat4 &view) const {
+    set_mat4("view", view);
+}
+
+void ShaderProgram::set_projection_matrix(const glm::mat4 &proj) const {
+    set_mat4("projection", proj);
+}
+
+void ShaderProgram::set_mat4(const std::string &name, const glm::mat4 &mat) const {
+    int uniformLoc = glGetUniformLocation(id, name.c_str());
+    if (uniformLoc == -1) {
+        throw std::runtime_error("Uniform '" + name + "' not found in shader program.");
+    }
+    glUniformMatrix4fv(uniformLoc, 1, GL_FALSE, glm::value_ptr(mat));
 }
