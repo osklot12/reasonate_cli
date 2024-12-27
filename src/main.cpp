@@ -107,6 +107,30 @@ int main() {
     shader_program.set_int("texture1", 0);
     shader_program.set_int("texture2", 1);
 
+    // model matrix to make plane lie on the ground
+    glm::mat4 model = glm::mat4(1.0f);
+    model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+
+    // view matrix
+    glm::mat4 view = glm::mat4(1.0f);
+    view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+
+    // projection matrix
+    glm::mat4 projection;
+    projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+
+    // query the model transformation uniform and send the matrix data
+    int modelLoc = glGetUniformLocation(shader_program.get_id(), "model");
+    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+
+    // query the view transformation uniform and send the matrix data
+    int viewLoc = glGetUniformLocation(shader_program.get_id(), "view");
+    glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+
+    // query the projection transformation uniform and send the matrix data
+    int projLoc = glGetUniformLocation(shader_program.get_id(), "projection");
+    glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
+
     while (!glfwWindowShouldClose(window)) {
         // input
         process_input(window);
@@ -118,15 +142,6 @@ int main() {
         // bind texture
         tex_container.bind_to_unit(GL_TEXTURE0);
         tex_face.bind_to_unit(GL_TEXTURE1);
-
-        // rotate container based on the glfw time function
-        glm::mat4 trans = glm::mat4(1.0f);
-        trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f));
-        trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
-        // query the location of the transformation uniform
-        unsigned int transformLoc = glGetUniformLocation(shader_program.get_id(), "transform");
-        // send the matrix data to the shaders
-        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
 
         // render container
         shader_program.use();
