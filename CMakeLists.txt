@@ -8,7 +8,9 @@ enable_testing()
 
 # add glad to the project
 include_directories(libs/glad/include)
-add_library(glad libs/glad/src/glad.c)
+add_library(glad libs/glad/src/glad.c
+        src/input/InputManager.cpp
+        src/input/InputManager.h)
 
 # add glm to the project
 include_directories(libs/glm)

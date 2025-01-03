@@ -14,6 +14,7 @@
 #include "graphics/texture/Texture.h"
 #include "util/stb_image.h"
 #include "graphics/camera/Camera.h"
+#include "input/InputManager.h"
 
 constexpr unsigned int SCR_WIDTH = 800;
 constexpr unsigned int SCR_HEIGHT = 600;
@@ -22,6 +23,9 @@ constexpr char *WINDOW_TITLE = "Reasonate";
 
 const std::string VERTEX_CODE_PATH = "../src/graphics/shader/shader_src/shader.vs";
 const std::string FRAGMENT_CODE_PATH = "../src/graphics/shader/shader_src/shader.fs";
+
+// mouse sensitivity
+constexpr float MOUSE_SENSITIVITY = 0.1f;
 
 // keeping track of if mouse has been moved
 bool firstMouse = true;
@@ -36,47 +40,28 @@ float lastX = 400, lastY = 300;
 // creating camera
 Camera camera;
 
-void process_input(GLFWwindow *window) {
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-        glfwSetWindowShouldClose(window, true);
-    }
-    const float cameraSpeed = 2.5f * deltaTime;
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-        camera.moveForward(cameraSpeed);
-    }
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-        camera.moveBackward(cameraSpeed);
-    }
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-        camera.moveLeft(cameraSpeed);
-    }
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-        camera.moveRight(cameraSpeed);
-    }
-}
+// creating input manager
+InputManager inputManager;
 
-void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
+// wrapper function for mouse movement callbacks
+void mouseCallbackWrapper(GLFWwindow *window, double xPos, double yPos) {
     if (firstMouse) {
-        lastX = xpos;
-        lastY = ypos;
+        lastX = xPos;
+        lastY = yPos;
         firstMouse = false;
     }
 
-    float xoffset = xpos - lastX;
-    float yoffset = lastY - ypos;
-    lastX = xpos;
-    lastY = ypos;
+    float xOffset = xPos - lastX;
+    float yOffset = lastY - yPos; // reversed since y-coordinates go from bottom to top
+    lastX = xPos;
+    lastY = yPos;
 
-    const float sensitivity = 0.1f;
-    xoffset *= sensitivity;
-    yoffset *= sensitivity;
-
-    camera.adjustYaw(xoffset);
-    camera.adjustPitch(yoffset);
+    inputManager.handleMouse(xOffset, yOffset);
 }
 
-void scrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
-    camera.adjustZoom((float)yoffset);
+// wrapper function for scroll callbacks
+void scrollCallbackWrapper(GLFWwindow *window, double xOffset, double yOffset) {
+    inputManager.handleScroll(yOffset);
 }
 
 int main() {
@@ -100,9 +85,35 @@ int main() {
         glViewport(0, 0, width, height);
     });
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-    glfwSetCursorPosCallback(window, mouse_callback);
-    glfwSetScrollCallback(window, scrollCallback);
+    glfwSetCursorPosCallback(window, mouseCallbackWrapper);
+    glfwSetScrollCallback(window, scrollCallbackWrapper);
 
+    // register camera-related input handlers
+    inputManager.registerKeyCallback(GLFW_KEY_W, [&](float deltaTime) {
+        camera.moveForward(2.5f * deltaTime);
+    });
+    inputManager.registerKeyCallback(GLFW_KEY_S, [&](float deltaTime) {
+        camera.moveBackward(2.5f * deltaTime);
+    });
+    inputManager.registerKeyCallback(GLFW_KEY_A, [&](float deltaTime) {
+        camera.moveLeft(2.5f * deltaTime);
+    });
+    inputManager.registerKeyCallback(GLFW_KEY_D, [&](float deltaTime) {
+        camera.moveRight(2.5f * deltaTime);
+    });
+
+    inputManager.registerKeyCallback(GLFW_KEY_ESCAPE, [&](float deltaTime){
+        glfwSetWindowShouldClose(window, true);
+    });
+
+    inputManager.registerMouseCallback([&](double xOffset, double yOffset) {
+        camera.adjustYaw(static_cast<float>(xOffset) * MOUSE_SENSITIVITY);
+        camera.adjustPitch(static_cast<float>(yOffset * MOUSE_SENSITIVITY));
+    });
+
+    inputManager.registerScrollCallback([&](double yOffset) {
+        camera.adjustZoom(static_cast<float>(-yOffset));
+    });
 
     // glad: load all opengl function pointers
     if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress)) {
@@ -213,8 +224,8 @@ int main() {
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
 
-        // input
-        process_input(window);
+        // process input
+        inputManager.processInput(window, deltaTime);
 
         // render
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -228,7 +239,7 @@ int main() {
         shader_program.use();
 
         // creating and setting projection matrix
-        glm::mat4 projection = glm::perspective(glm::radians(camera.getZoom()), (float)SCR_WIDTH / (float)SCR_HEIGHT,
+        glm::mat4 projection = glm::perspective(glm::radians(camera.getZoom()), (float) SCR_WIDTH / (float) SCR_HEIGHT,
                                                 0.1f, 100.0f);
         shader_program.set_projection_matrix(projection);
 
