@@ -27,42 +27,12 @@ const std::string FRAGMENT_CODE_PATH = "../src/graphics/shader/shader_src/shader
 // mouse sensitivity
 constexpr float MOUSE_SENSITIVITY = 0.1f;
 
-// keeping track of if mouse has been moved
-bool firstMouse = true;
-
 // defining delta time
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
-// initial mouse coordinates
-float lastX = 400, lastY = 300;
-
 // creating camera
 Camera camera;
-
-// creating input manager
-InputManager inputManager;
-
-// wrapper function for mouse movement callbacks
-void mouseCallbackWrapper(GLFWwindow *window, double xPos, double yPos) {
-    if (firstMouse) {
-        lastX = xPos;
-        lastY = yPos;
-        firstMouse = false;
-    }
-
-    float xOffset = xPos - lastX;
-    float yOffset = lastY - yPos; // reversed since y-coordinates go from bottom to top
-    lastX = xPos;
-    lastY = yPos;
-
-    inputManager.handleMouse(xOffset, yOffset);
-}
-
-// wrapper function for scroll callbacks
-void scrollCallbackWrapper(GLFWwindow *window, double xOffset, double yOffset) {
-    inputManager.handleScroll(yOffset);
-}
 
 int main() {
     // initialize and configure
@@ -80,13 +50,28 @@ int main() {
     }
     glfwMakeContextCurrent(window);
 
+    // initialize glad
+    if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress)) {
+        std::cout << "Failed to initialize GLAD" << std::endl;
+        return -1;
+    }
+
+    // configure global opengl state
+    glEnable(GL_DEPTH_TEST);
+    glViewport(0, 0, 800, 600);
+
+    // create and configure input manager
+    InputManager inputManager;
+    glfwSetWindowUserPointer(window, &inputManager);
+
+    glfwSetCursorPosCallback(window, InputManager::mouseCallbackWrapper);
+    glfwSetScrollCallback(window, InputManager::scrollCallbackWrapper);
+
     // registering callback functions
     glfwSetFramebufferSizeCallback(window, [](GLFWwindow *window, const int width, const int height) {
         glViewport(0, 0, width, height);
     });
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-    glfwSetCursorPosCallback(window, mouseCallbackWrapper);
-    glfwSetScrollCallback(window, scrollCallbackWrapper);
 
     // register camera-related input handlers
     inputManager.registerKeyCallback(GLFW_KEY_W, [&](float deltaTime) {
@@ -114,16 +99,6 @@ int main() {
     inputManager.registerScrollCallback([&](double yOffset) {
         camera.adjustZoom(static_cast<float>(-yOffset));
     });
-
-    // glad: load all opengl function pointers
-    if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress)) {
-        std::cout << "Failed to initialize GLAD" << std::endl;
-        return -1;
-    }
-
-    // configure global opengl state
-    glEnable(GL_DEPTH_TEST);
-    glViewport(0, 0, 800, 600);
 
     // create vertex and fragment shaders
     const std::string vertex_code = FileUtil::read_file(VERTEX_CODE_PATH);

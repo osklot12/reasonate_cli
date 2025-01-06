@@ -22,8 +22,8 @@ public:
     // register single key callback
     void registerKeyCallback(int key, const KeyCallBack &callback);
 
-    // register multi-key callback
-    void registerComboCallback(const std::vector<int> &keys, const ComboCallback &callback);
+    // unregisters a single key callback
+    void unregisterKeyCallback(int key);
 
     // register mouse movement callback
     void registerMouseCallback(const MouseCallback &callback);
@@ -40,6 +40,12 @@ public:
     // handles scrolling
     void handleScroll(double yOffset);
 
+    // handles first mouse movement
+    void handleFirstMouse(float xPos, float yPos);
+
+    // callback wrappers
+    static void mouseCallbackWrapper(GLFWwindow *window, double xPos, double yPos);
+    static void scrollCallbackWrapper(GLFWwindow *window, double xOffset, double yOffset);
 private:
     // maps keys to callback functions
     std::unordered_map<int, KeyCallBack> keyCallbacks;
@@ -50,6 +56,15 @@ private:
     // callback for scrolling
     ScrollCallback scrollCallback = nullptr;
 
+    // keeps track of whether mouse has been moved
+    bool firstMouse = true;
+
+    // stores the last mouse x and y positions
+    float lastX = 400.0f;
+    float lastY = 300.0f;
+
+    // retrieves the input manager associated with a glfw window
+    static InputManager *getWindowInputManager(GLFWwindow *window);
 };
 
 

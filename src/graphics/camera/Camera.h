@@ -79,6 +79,12 @@ private:
     // world vector
     glm::vec3 worldUpVec;
 
+    // indicates if mouse has been moved
+    bool firstMouse;
+
+    // last mouse x and y pos
+    float lastX, lastY;
+
     // configuring camera vectors
     void updateDirVecFromAngles();
     void updateRightVec();
