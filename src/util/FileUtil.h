@@ -4,6 +4,7 @@
 
 #ifndef FILEUTIL_H
 #define FILEUTIL_H
+
 #include <fstream>
 #include <sstream>
 #include <string>

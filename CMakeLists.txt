@@ -1,7 +1,10 @@
 cmake_minimum_required(VERSION 3.29)
 project(reasonate_cli)
 
+# configuring cmake
 set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_EXPERIMENTAL_CXX_MODULE_CMAKE_API ON)
 
 # enable testing
 enable_testing()
