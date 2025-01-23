@@ -4,7 +4,7 @@
 
 #include <gtest/gtest.h>
 
-import Math.Matrix;
+#include "../math/linalg/Matrix.h"
 
 // default constructor should succeed
 TEST(matrix_test, default_constructor) {

@@ -3,6 +3,7 @@
 //
 
 #include "GLTexture.h"
+
 GLTexture::GLTexture(const GLenum target) : target(target) {
     glGenTextures(1, &id);
 }

@@ -5,7 +5,6 @@
 #ifndef REASONATE_CLI_CAMERA_H
 #define REASONATE_CLI_CAMERA_H
 
-
 #include "glm/vec3.hpp"
 #include "glm/detail/type_mat.hpp"
 

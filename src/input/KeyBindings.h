@@ -2,13 +2,11 @@
 // Created by osklot12 on 1/22/25.
 //
 
-module;
-
+#ifndef KEYBINDINGS_H
+#define KEYBINDINGS_H
 #include <GLFW/glfw3.h>
 
-export module Input.KeyBindings;
-
-export namespace Input {
+namespace Input {
     // available key bindings
     enum class KeyBinding {
         Q, W, E, R, T, Y, U, I, O, P,
@@ -67,3 +65,5 @@ export namespace Input {
         }
     };
 }
+
+#endif //KEYBINDINGS_H

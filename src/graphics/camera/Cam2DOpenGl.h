@@ -10,7 +10,7 @@
 #include <glm/detail/type_mat4x4.hpp>
 #include <glm/detail/type_vec2.hpp>
 
-import Graphics.Camera2D;
+#include "Camera2D.h"
 
 namespace Graphics {
     // a 2d camera for opengl
@@ -37,7 +37,7 @@ namespace Graphics {
 
         float getZoom() const override;
 
-        glm::mat4 getViewMatrix() const;
+        [[nodiscard]] glm::mat4 getViewMatrix() const;
 
         // setters
         void setPos(float x, float y) override;
@@ -70,7 +70,7 @@ namespace Graphics {
         // view matrix
         glm::mat4 viewMatrix;
 
-        glm::mat4 genViewMatrix() const;
+        [[nodiscard]] glm::mat4 genViewMatrix() const;
     };
 }
 

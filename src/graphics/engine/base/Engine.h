@@ -1,12 +1,13 @@
 //
-// Created by osklot12 on 1/20/25.
+// Created by osklot12 on 1/22/25.
 //
 
-export module Graphics.Engine;
+#ifndef ENGINE_H
+#define ENGINE_H
 
-import Input.InputManager;
+#include "../../../input/InputManager.h"
 
-export namespace Graphics {
+namespace Graphics {
     // a graphics engine interface
     class Engine {
     public:
@@ -20,3 +21,6 @@ export namespace Graphics {
         virtual Input::InputManager& getInputManager() = 0;
     };
 }
+
+
+#endif //ENGINE_H

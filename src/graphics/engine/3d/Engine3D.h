@@ -1,15 +1,18 @@
 //
-// Created by osklot12 on 1/18/25.
+// Created by osklot12 on 1/22/25.
 //
 
-export module Graphics.Engine3D;
+#ifndef ENGINE3D_H
+#define ENGINE3D_H
 
-import Graphics.Engine;
+#include "../base/Engine.h"
 
-export namespace Graphics {
+namespace Graphics {
     // a graphics engine providing three dimensions
     class Engine3D : public Engine {
     public:
         ~Engine3D() override = default;
     };
 }
+
+#endif //ENGINE3D_H

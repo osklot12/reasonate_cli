@@ -2,15 +2,13 @@
 // Created by osklot12 on 1/22/25.
 //
 
-module;
-
+#ifndef INPUTMANAGER_H
+#define INPUTMANAGER_H
 #include <functional>
 
-export module Input.InputManager;
+#include "KeyBindings.h"
 
-import Input.KeyBindings;
-
-export namespace Input {
+namespace Input {
     // interface for input managers
     class InputManager {
     public:
@@ -23,9 +21,11 @@ export namespace Input {
         virtual ~InputManager() = default;
 
         // register key callback
-        virtual void registerKeyCallback(KeyBinding key, const KeyCallBack& callback) = 0;
+        virtual void registerKeyCallback(KeyBinding key, const KeyCallBack &callback) = 0;
 
         // unregister key callback
         virtual void unregisterKeyCallback(KeyBinding key) = 0;
     };
 }
+
+#endif //INPUTMANAGER_H

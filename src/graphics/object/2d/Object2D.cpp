@@ -2,12 +2,7 @@
 // Created by osklot12 on 1/20/25.
 //
 
-#include <memory>
-#include <vector>
-#include <array>
-
-import Graphics.Object2D;
-import Graphics.Object2D.Constants;
+#include "Object2D.h"
 
 namespace Graphics {
     Object2D::Object2D(const ::std::shared_ptr<::std::vector<float> > &vertices) : Object(vertices), position(INIT_POS),

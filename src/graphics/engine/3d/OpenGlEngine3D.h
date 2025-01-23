@@ -9,14 +9,12 @@
 #include <vector>
 #include <memory>
 
+#include "Engine3D.h"
 #include "../shader/ShaderProgram.h"
 #include "../camera/Camera.h"
 #include "../../input/InputManagerOpenGl.h"
-
-import Graphics.Engine3D;
-import Graphics.OpenGlEngine;
-import Graphics.OpenGlStatus;
-import Graphics.Object;
+#include "../base/OpenGlEngine.h"
+#include "../object/base/Object.h"
 
 namespace Graphics {
     // a 3d graphics engine implementation using opengl

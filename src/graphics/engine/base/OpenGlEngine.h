@@ -1,21 +1,17 @@
 //
-// Created by osklot12 on 1/19/25.
+// Created by osklot12 on 1/22/25.
 //
 
-module;
+#ifndef OPENGLENGINE_H
+#define OPENGLENGINE_H
 
-#include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <string>
+#include <thread>
 
-export module Graphics.OpenGlEngine;
+#include "Engine.h"
 
-import <string>;
-import <thread>;
-import <memory>;
-import Graphics.Engine;
-import Graphics.OpenGlStatus;
-
-export namespace Graphics {
+namespace Graphics {
     // constants: version
     constexpr int OPENGL_VERSION_MAJOR = 3;
     constexpr int OPENGL_VERSION_MINOR = 3;
@@ -62,3 +58,5 @@ export namespace Graphics {
         std::atomic<bool> running;
     };
 }
+
+#endif //OPENGLENGINE_H

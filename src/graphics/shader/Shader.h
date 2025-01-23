@@ -4,8 +4,9 @@
 
 #ifndef SHADER_H
 #define SHADER_H
-#include <string>
+
 #include <glad/glad.h>
+#include <string>
 #include "GLShader.h"
 
 enum class SHADER_TYPE {

@@ -5,13 +5,10 @@
 #ifndef REASONATE_CLI_INPUTMANAGER_H
 #define REASONATE_CLI_INPUTMANAGER_H
 
-
 #include <functional>
 #include <GLFW/glfw3.h>
-#include <unordered_set>
 
-import Input.InputManager;
-import Input.KeyBindings;
+#include "InputManager.h"
 
 namespace Input {
     // handles user input with custom callback functions

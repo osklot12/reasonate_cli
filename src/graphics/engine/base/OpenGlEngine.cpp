@@ -8,8 +8,8 @@
 #include <string>
 #include <thread>
 
-import Graphics.OpenGlEngine;
-import Graphics.OpenGlStatus;
+#include "OpenGlEngine.h"
+#include "../OpenGlStatus.h"
 
 namespace Graphics {
     OpenGlEngine::OpenGlEngine() : window(nullptr) {

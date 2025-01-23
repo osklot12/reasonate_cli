@@ -1,32 +1,36 @@
 //
-// Created by osklot12 on 1/20/25.
+// Created by osklot12 on 1/22/25.
 //
 
-module;
+#ifndef OBJECT2D_H
+#define OBJECT2D_H
 
+#include "../base/Object.h"
+
+#include <array>
 #include <memory>
 #include <vector>
-#include <array>
 
-export module Graphics.Object2D;
+namespace Graphics {
+    // default values
+    constexpr std::array<float, 2> INIT_POS{0, 0};
+    constexpr float INIT_ROTATION = 0.0f;
+    constexpr std::array<float, 2> INIT_SCALE{1, 1};
 
-import Graphics.Object;
-import Graphics.Object2D.Constants;
-
-export namespace Graphics {
     // a graphical object in two dimensions
     class Object2D : public Object {
     public:
         // constructor for shared_ptr
-        explicit Object2D(const std::shared_ptr<std::vector<float>>& vertices);
+        explicit Object2D(const std::shared_ptr<std::vector<float> > &vertices);
 
         // constructor for vector
-        explicit Object2D(const std::vector<float>& vertices);
+        explicit Object2D(const std::vector<float> &vertices);
 
         // constructor for array
-        template <std::size_t N>
+        template<std::size_t N>
         explicit Object2D(const std::array<float, N> &vertices) : Object(vertices), position(INIT_POS),
-        rotation(INIT_ROTATION), scale(INIT_SCALE) {}
+                                                                  rotation(INIT_ROTATION), scale(INIT_SCALE) {
+        }
 
         // returns the position coordinates
         [[nodiscard]] const std::array<float, 2> &getPosition() const;
@@ -57,3 +61,6 @@ export namespace Graphics {
         std::array<float, 2> scale;
     };
 }
+
+
+#endif //OBJECT2D_H

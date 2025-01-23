@@ -1,10 +1,11 @@
 //
-// Created by osklot12 on 1/19/25.
+// Created by osklot12 on 1/22/25.
 //
 
-export module Graphics.OpenGlStatus;
+#ifndef OPENGLSTATUS_H
+#define OPENGLSTATUS_H
 
-export class OpenGlStatus {
+class OpenGlStatus {
 public:
     // static method to get the singleton instance
     static OpenGlStatus& instance() {
@@ -31,3 +32,5 @@ private:
     OpenGlStatus(const OpenGlStatus&) = delete;
     OpenGlStatus& operator=(const OpenGlStatus&) = delete;
 };
+
+#endif //OPENGLSTATUS_H

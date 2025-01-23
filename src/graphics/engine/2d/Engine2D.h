@@ -1,14 +1,15 @@
 //
-// Created by osklot12 on 1/19/25.
+// Created by osklot12 on 1/22/25.
 //
 
-export module Graphics.Engine2D;
+#ifndef ENGINE2D_H
+#define ENGINE2D_H
 
-import Graphics.Engine;
-import Graphics.Camera2D;
-import Input.InputManager;
+#include "../base/Engine.h"
 
-export namespace Graphics {
+namespace Graphics {
+    class Camera2D;
+
     // a graphics engine providing two dimensions
     class Engine2D : public Engine {
     public:
@@ -19,3 +20,5 @@ export namespace Graphics {
         virtual Camera2D& getCamera() = 0;
     };
 }
+
+#endif //ENGINE2D_H

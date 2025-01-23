@@ -1,16 +1,15 @@
 //
-// Created by osklot12 on 1/19/25.
+// Created by osklot12 on 1/22/25.
 //
 
-module;
+#ifndef EPSILON_H
+#define EPSILON_H
 
 #include <memory>
 
-export module Graphics.Epsilon;
+namespace Graphics {
+    class Engine2D;
 
-import Graphics.Engine2D;
-
-export namespace Graphics {
     // a graphics program for general purposes
     class Epsilon {
     public:
@@ -27,3 +26,5 @@ export namespace Graphics {
         double zoom;
     };
 }
+
+#endif //EPSILON_H

@@ -1,16 +1,14 @@
 //
-// Created by osklot12 on 1/19/25.
+// Created by osklot12 on 1/22/25.
 //
 
-module;
+#ifndef OBJECT_H
+#define OBJECT_H
 
 #include <memory>
 #include <vector>
-#include <array>
 
-export module Graphics.Object;
-
-export namespace Graphics {
+namespace Graphics {
     // a graphical object
     class Object {
     public:
@@ -34,3 +32,6 @@ export namespace Graphics {
         std::shared_ptr<const std::vector<float>> vertices;
     };
 }
+
+
+#endif //OBJECT_H

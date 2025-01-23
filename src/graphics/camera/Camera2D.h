@@ -1,16 +1,13 @@
 //
-// Created by osklot12 on 1/21/25.
+// Created by osklot12 on 1/22/25.
 //
 
-module;
+#ifndef CAMERA2D_H
+#define CAMERA2D_H
 
 #include <array>
 
-export module Graphics.Camera2D;
-
-import Math.Matrix;
-
-export namespace Graphics {
+namespace Graphics {
     // an interface for 2d cameras
     class Camera2D {
     public:
@@ -43,3 +40,5 @@ export namespace Graphics {
         virtual void setZoom(float amount) = 0;
     };
 }
+
+#endif //CAMERA2D_H

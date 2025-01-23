@@ -1,19 +1,18 @@
 //
-// Created by osklot12 on 1/19/25.
+// Created by osklot12 on 1/22/25.
 //
 
-module;
-
-#include <vector>
+#ifndef MATRIX_H
+#define MATRIX_H
+#include <ostream>
 #include <stdexcept>
-#include <iostream>
-
-export module Math.Matrix;
+#include <type_traits>
+#include <vector>
 
 constexpr size_t DEFAULT_N_ROWS = 3;
 constexpr size_t DEFAULT_N_COLS = 1;
 
-export namespace Math {
+namespace Math {
     template<typename T> requires std::is_arithmetic_v<T>
     class Matrix {
     public:
@@ -248,3 +247,5 @@ export namespace Math {
         }
     };
 }
+
+#endif //MATRIX_H

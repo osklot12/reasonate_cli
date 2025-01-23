@@ -5,24 +5,21 @@
 #ifndef REASONATE_CLI_OPENGLENGINE_H
 #define REASONATE_CLI_OPENGLENGINE_H
 
-#include <glad/glad.h>
+#include "../../../../libs/glad/include/glad/glad.h"
 #include <vector>
 #include <array>
 #include <memory>
 
-#include "../shader/ShaderProgram.h"
-#include "../camera/Camera.h"
+#include "Engine2D.h"
+#include "../../shader/ShaderProgram.h"
 #include "../../input/InputManagerOpenGl.h"
 #include "../camera/Cam2DOpenGl.h"
-
-import Graphics.Engine2D;
-import Graphics.OpenGlEngine;
-import Graphics.OpenGlStatus;
-import Graphics.Object2D;
-import Graphics.Camera2D;
-import Input.InputManager;
+#include "../base/OpenGlEngine.h"
+#include "../../object/2d/Object2D.h"
 
 namespace Graphics {
+    class Object2D;
+
     // a 2d graphics engine implementation using opengl
     class OpenGlEngine2D : public OpenGlEngine, public Engine2D {
     public:

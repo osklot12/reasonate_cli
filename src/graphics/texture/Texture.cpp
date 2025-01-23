@@ -5,10 +5,10 @@
 #include "Texture.h"
 #include "../../util/stb_image.h"
 
+#include <glad/glad.h>
 #include <iostream>
 #include <ostream>
 #include <unordered_map>
-#include <glad/glad.h>
 
 Texture::Texture(const std::string &path, const GLenum target)
     : gl_texture(target), width(0), height(0), nr_channels(0), path(path) {

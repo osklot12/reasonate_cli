@@ -2,11 +2,7 @@
 // Created by osklot12 on 1/19/25.
 //
 
-#include <memory>
-#include <vector>
-#include <array>
-
-import Graphics.Object;
+#include "Object.h"
 
 namespace Graphics {
     Object::Object(const std::shared_ptr<std::vector<float>> &vertices) : vertices(vertices) {}

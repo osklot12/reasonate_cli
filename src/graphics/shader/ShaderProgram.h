@@ -4,12 +4,12 @@
 
 #ifndef SHADERPROGRAM_H
 #define SHADERPROGRAM_H
-#include <string>
+
 #include <glad/glad.h>
+#include <string>
+
 #include "../../wrapper/glm_wrapper.h"
-
 #include "Shader.h"
-
 
 class ShaderProgram {
 public:
