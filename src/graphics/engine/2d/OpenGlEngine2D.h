@@ -18,10 +18,8 @@
 #include "../../object/2d/Object2D.h"
 
 namespace Graphics {
-    class Object2D;
-
-    // a 2d graphics engine implementation using opengl
-    class OpenGlEngine2D : public OpenGlEngine, public Engine2D {
+    // 2d graphics engine implementation using opengl
+    class OpenGlEngine2D final : public OpenGlEngine, public Engine2D {
     public:
         // constructor
         OpenGlEngine2D();
@@ -32,11 +30,8 @@ namespace Graphics {
         // runs the engine
         void run() override;
 
-        // adds graphical object
-        void addObject(Object2D& obj);
-
-        // draws a line
-        void drawLine(const std::array<float, 2>& from, const std::array<float, 2>& to, const std::array<float, 4>& color);
+        // adds a graphical object
+        void addObject(Object2D& obj) override;
 
         // getter for camera
         Camera2D& getCamera() override;

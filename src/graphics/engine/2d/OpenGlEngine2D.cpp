@@ -50,9 +50,10 @@ namespace Graphics {
 
             shaderProgram->set_mat4("uView", camera.getViewMatrix());
 
-            // draw point
-            drawLine(std::array{-100.0f, 0.0f}, std::array{100.0f, 0.0f},
-                std::array{1.0f, 1.0f, 1.0f, 1.0f});
+            // draw objects
+            for (auto& obj : objects) {
+                drawObject(obj, vbo, vao);
+            }
 
             glfwSwapBuffers(window);
             if (!window) {
@@ -165,17 +166,6 @@ namespace Graphics {
     void OpenGlEngine2D::initVertexArrays() {
         addVertexAttribute(0, 2, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *) 0);
         addVertexAttribute(1, 4, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *) (2 * sizeof(float)));
-    }
-
-    void OpenGlEngine2D::drawLine(const std::array<float, 2> &from, const std::array<float, 2> &to,
-                                  const std::array<float, 4> &color) {
-        std::vector<float> vertices{
-            from[0], from[1], color[0], color[1], color[2], color[3],
-            to[0], to[1], color[0], color[1], color[2], color[3],
-        };
-
-        Object2D line(vertices);
-        drawObject(line, vbo, vao);
     }
 
     void OpenGlEngine2D::drawObject(const Object2D& obj, const unsigned int vbo_, const unsigned int vao_) {

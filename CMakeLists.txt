@@ -10,7 +10,8 @@ set(CMAKE_EXPERIMENTAL_CXX_MODULE_CMAKE_API ON)
 enable_testing()
 
 # add glad to the project
-add_library(glad libs/glad/src/glad.c)
+add_library(glad libs/glad/src/glad.c
+        src/graphics/program/Epsilon.cpp)
 target_include_directories(glad PUBLIC libs/glad/include)
 
 # add google test to the project

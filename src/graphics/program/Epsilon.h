@@ -6,24 +6,23 @@
 #define EPSILON_H
 
 #include <memory>
+#include "../engine/2d/Engine2D.h"
 
 namespace Graphics {
-    class Engine2D;
-
     // a graphics program for general purposes
     class Epsilon {
     public:
-        // constructor
-        explicit Epsilon(std::unique_ptr<Engine2D> engine);
+        // constructor for unique_ptr
+        explicit Epsilon(std::unique_ptr<Engine2D> engine_);
+
+        // runs the program
+        void run();
     private:
         // graphics engine
         std::unique_ptr<Engine2D> engine;
 
-        // x and y offset
-        double xOffset, yOffset;
-
-        // zoom
-        double zoom;
+        // initializes the program
+        void init();
     };
 }
 
