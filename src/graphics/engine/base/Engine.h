@@ -10,9 +10,21 @@
 namespace Graphics {
     // a graphics engine interface
     class Engine {
+    protected:
+        // protected default constructor
+        Engine() = default;
+
     public:
         // destructor
         virtual ~Engine() = default;
+
+        // delete copy constructor and copy assignment operator
+        Engine(const Engine&) = delete;
+        Engine& operator=(const Engine&) = delete;
+
+        // default move constructor and move assignment operator
+        Engine(Engine&&) = default;
+        Engine& operator=(Engine&&) = default;
 
         // runs the engine
         virtual void run() = 0;

@@ -13,9 +13,21 @@ namespace Graphics {
 
     // a graphics engine providing two dimensions
     class Engine2D : public Engine {
+    protected:
+        // protected default constructor
+        Engine2D() = default;
+
     public:
         // destructor
         ~Engine2D() override = default;
+
+        // delete copy constructor and copy assignment operator
+        Engine2D(const Engine2D&) = delete;
+        Engine2D& operator=(const Engine2D&) = delete;
+
+        // default move constructor and move assignment operator
+        Engine2D(Engine2D&&) = default;
+        Engine2D& operator=(Engine2D&&) = default;
 
         // adds a graphical object
         virtual void addObject(Object2D& obj) = 0;
