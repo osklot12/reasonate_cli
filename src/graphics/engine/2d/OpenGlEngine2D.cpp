@@ -37,7 +37,7 @@ namespace Graphics {
         shaderProgram->set_mat4("uProjection", projectionMatrix);
 
         // render loop
-        while (!glfwWindowShouldClose(window)) {
+        while (!glfwWindowShouldClose(window.get())) {
             const auto currentFrame = static_cast<float>(glfwGetTime());
             deltaTime = currentFrame - lastFrame;
             lastFrame = currentFrame;
@@ -46,7 +46,7 @@ namespace Graphics {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
             // process input
-            inputManager.processInput(window, deltaTime);
+            inputManager.processInput(window.get(), deltaTime);
 
             shaderProgram->set_mat4("uView", camera.getViewMatrix());
 
@@ -55,7 +55,7 @@ namespace Graphics {
                 drawObject(obj, vbo, vao);
             }
 
-            glfwSwapBuffers(window);
+            glfwSwapBuffers(window.get());
             if (!window) {
                 throw std::runtime_error("GLFW window is null before calling glfwPollEvents.");
             }
@@ -86,16 +86,16 @@ namespace Graphics {
     }
 
     Input::InputManagerOpenGl OpenGlEngine2D::createInputManager() {
-        glfwSetWindowUserPointer(window, &inputManager);
+        glfwSetWindowUserPointer(window.get(), &inputManager);
 
-        glfwSetCursorPosCallback(window, Input::InputManagerOpenGl::mouseCallbackWrapper);
-        glfwSetScrollCallback(window, Input::InputManagerOpenGl::scrollCallbackWrapper);
+        glfwSetCursorPosCallback(window.get(), Input::InputManagerOpenGl::mouseCallbackWrapper);
+        glfwSetScrollCallback(window.get(), Input::InputManagerOpenGl::scrollCallbackWrapper);
 
         // registering callback functions
-        glfwSetFramebufferSizeCallback(window, [](GLFWwindow *window, const int width, const int height) {
+        glfwSetFramebufferSizeCallback(window.get(), [](GLFWwindow *window, const int width, const int height) {
             glViewport(0, 0, width, height);
         });
-        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        glfwSetInputMode(window.get(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
         // register camera-related input handlers
         inputManager.registerKeyCallback(Input::KeyBinding::W, [&](float deltaTime) {
@@ -112,7 +112,7 @@ namespace Graphics {
         });
 
         inputManager.registerKeyCallback(Input::KeyBinding::Escape, [&](float deltaTime) {
-            glfwSetWindowShouldClose(window, true);
+            glfwSetWindowShouldClose(window.get(), true);
         });
 
         inputManager.registerMouseCallback([&](double xOffset, double yOffset) {

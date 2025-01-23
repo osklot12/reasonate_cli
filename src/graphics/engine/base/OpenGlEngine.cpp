@@ -16,11 +16,6 @@ namespace Graphics {
         initEngine();
     }
 
-    OpenGlEngine::~OpenGlEngine() {
-        if (window) glfwDestroyWindow(window);
-        glfwTerminate();
-    }
-
     void OpenGlEngine::initEngine() {
         if (OpenGlStatus &status = OpenGlStatus::instance(); !status.getConfigured()) {
             initOpenGl();
@@ -28,7 +23,7 @@ namespace Graphics {
         }
 
         window = createWindow();
-        glfwMakeContextCurrent(window);
+        glfwMakeContextCurrent(window.get());
 
         initGlad();
 
@@ -42,13 +37,13 @@ namespace Graphics {
         glfwWindowHint(GLFW_OPENGL_PROFILE, OPEN_GL_PROFILE);
     }
 
-    GLFWwindow *OpenGlEngine::createWindow(int width, int height,
+    std::unique_ptr<GLFWwindow, GLFWWindowDeleter> OpenGlEngine::createWindow(int width, int height,
                                      const std::string &windowTitle, GLFWmonitor *monitor) {
-        auto window = glfwCreateWindow(width, height, windowTitle.c_str(), NULL, NULL);
-        if (window == NULL) {
+        const auto rawWindow = glfwCreateWindow(width, height, windowTitle.c_str(), NULL, NULL);
+        if (!rawWindow) {
             throw std::runtime_error("Failed to create GLFW window");
         }
-        return window;
+        return std::unique_ptr<GLFWwindow, GLFWWindowDeleter>(rawWindow);
     }
 
     void OpenGlEngine::initGlad() {

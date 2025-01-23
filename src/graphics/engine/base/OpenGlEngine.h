@@ -12,6 +12,15 @@
 #include "Engine.h"
 
 namespace Graphics {
+    // custom deleter for glfw window resource
+    struct GLFWWindowDeleter {
+        void operator()(GLFWwindow* window) const {
+            if (window) {
+                glfwDestroyWindow(window);
+            }
+        }
+    };
+
     // constants: version
     constexpr int OPENGL_VERSION_MAJOR = 3;
     constexpr int OPENGL_VERSION_MINOR = 3;
@@ -29,7 +38,7 @@ namespace Graphics {
         OpenGlEngine();
 
         // destructor
-        ~OpenGlEngine() override;
+        ~OpenGlEngine() override = default;
 
     private:
         // initializes the graphics engine
@@ -39,7 +48,7 @@ namespace Graphics {
         static void initOpenGl();
 
         // creates a new window
-        static GLFWwindow *createWindow(int width = WINDOW_WIDTH, int height = WINDOW_HEIGHT,
+        static std::unique_ptr<GLFWwindow, GLFWWindowDeleter> createWindow(int width = WINDOW_WIDTH, int height = WINDOW_HEIGHT,
                                         const std::string &windowTitle = WINDOW_TITLE, GLFWmonitor *monitor = nullptr);
 
         // initializes glad
@@ -49,7 +58,7 @@ namespace Graphics {
         static void configureOpenGlState();
     protected:
         // the window associated with the engine
-        GLFWwindow *window;
+        std::unique_ptr<GLFWwindow, GLFWWindowDeleter> window;
 
         // render thread
         std::thread renderThread;
