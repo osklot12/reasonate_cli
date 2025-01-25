@@ -7,6 +7,8 @@
 #include <vector>
 
 #include "../object/2d/Object2D.h"
+#include "../../input/InputManager.h"
+#include "../camera/Camera2D.h"
 
 namespace Graphics {
     Epsilon::Epsilon(std::unique_ptr<Engine2D> engine_) {
@@ -30,5 +32,11 @@ namespace Graphics {
 
         Object2D line{vertices};
         engine->addObject(line);
+
+        const std::shared_ptr<Input::InputManager> inputManager = engine->getInputManager();
+        const std::shared_ptr<Camera2D> cam = engine->getCamera();
+        inputManager->registerKeyCallback(Input::KeyBinding::W, [cam](const float deltaTime) {
+            cam->moveVertical(100.0f * deltaTime);
+        });
     }
 }

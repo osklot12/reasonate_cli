@@ -10,6 +10,7 @@
 #include <thread>
 
 #include "Engine.h"
+#include "../../../input/InputManagerOpenGl.h"
 
 namespace Graphics {
     // custom deleter for glfw window resource
@@ -32,13 +33,13 @@ namespace Graphics {
     const std::string WINDOW_TITLE = "OpenGL Engine";
 
     // an opengl graphics engine base class
-    class OpenGlEngine : public Engine {
+    class OpenGlEngine {
     public:
         // constructor
         OpenGlEngine();
 
         // destructor
-        ~OpenGlEngine() override = default;
+        virtual ~OpenGlEngine() = default;
 
     private:
         // initializes the graphics engine
@@ -57,7 +58,7 @@ namespace Graphics {
         // configures opengl state
         static void configureOpenGlState();
     protected:
-        // the window associated with the engine
+        // window associated with the engine
         std::unique_ptr<GLFWwindow, GLFWWindowDeleter> window;
 
         // render thread

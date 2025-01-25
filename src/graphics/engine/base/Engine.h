@@ -29,8 +29,8 @@ namespace Graphics {
         // runs the engine
         virtual void run() = 0;
 
-        // getter for input manager
-        virtual Input::InputManager& getInputManager() = 0;
+        // provides access to the input manager
+        virtual std::shared_ptr<Input::InputManager> getInputManager() = 0;
     };
 }
 

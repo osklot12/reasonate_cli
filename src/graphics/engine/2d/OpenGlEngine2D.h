@@ -7,12 +7,10 @@
 
 #include "../../../../libs/glad/include/glad/glad.h"
 #include <vector>
-#include <array>
 #include <memory>
 
 #include "Engine2D.h"
 #include "../../shader/ShaderProgram.h"
-#include "../../input/InputManagerOpenGl.h"
 #include "../camera/Cam2DOpenGl.h"
 #include "../base/OpenGlEngine.h"
 #include "../../object/2d/Object2D.h"
@@ -31,13 +29,13 @@ namespace Graphics {
         void run() override;
 
         // adds a graphical object
-        void addObject(Object2D& obj) override;
+        void addObject(Object2D &obj) override;
 
-        // getter for camera
-        Camera2D& getCamera() override;
+        // provides access to the camera
+        std::shared_ptr<Camera2D> getCamera() override;
 
-        // getter for input manager
-        Input::InputManager& getInputManager() override;
+        // provides access to the input manager
+        std::shared_ptr<Input::InputManager> getInputManager() override;
 
     private:
         // initializes the graphics engine
@@ -63,9 +61,10 @@ namespace Graphics {
         // initializes vertex arrays needed
         void initVertexArrays();
 
-        Input::InputManagerOpenGl createInputManager();
+        // configures the input manager
+        void configInputManager();
 
-        void drawObject(const Object2D& obj, const unsigned int vbo, const unsigned int vao);
+        void drawObject(const Object2D &obj, const unsigned int vbo, const unsigned int vao);
 
         // shader program
         std::unique_ptr<ShaderProgram> shaderProgram;
@@ -80,10 +79,10 @@ namespace Graphics {
         float lastFrame;
 
         // camera
-        Cam2DOpenGl camera;
+        std::shared_ptr<Cam2DOpenGl> camera;
 
         // input manager
-        Input::InputManagerOpenGl inputManager;
+        std::shared_ptr<Input::InputManagerOpenGl> inputManager;
 
         // default screen dimensions
         static constexpr unsigned int SCR_WIDTH = 800;

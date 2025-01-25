@@ -19,7 +19,7 @@ namespace Graphics {
 
     public:
         // destructor
-        ~Engine2D() override = default;
+        virtual ~Engine2D() = default;
 
         // delete copy constructor and copy assignment operator
         Engine2D(const Engine2D&) = delete;
@@ -33,7 +33,7 @@ namespace Graphics {
         virtual void addObject(Object2D& obj) = 0;
 
         // getter for camera
-        virtual Camera2D& getCamera() = 0;
+        virtual std::shared_ptr<Camera2D> getCamera() = 0;
     };
 }
 

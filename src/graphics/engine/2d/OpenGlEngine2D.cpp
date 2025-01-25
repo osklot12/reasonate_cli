@@ -12,7 +12,9 @@
 #include "../input/InputManagerOpenGl.h"
 
 namespace Graphics {
-    OpenGlEngine2D::OpenGlEngine2D() : vbo(), vao(), deltaTime(0.0f), lastFrame(0.0f) {
+    OpenGlEngine2D::OpenGlEngine2D() : vbo(), vao(), deltaTime(0.0f), lastFrame(0.0f),
+                                       camera(std::make_shared<Cam2DOpenGl>()),
+                                       inputManager(std::make_shared<Input::InputManagerOpenGl>()) {
         initEngine();
     }
 
@@ -46,12 +48,12 @@ namespace Graphics {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
             // process input
-            inputManager.processInput(window.get(), deltaTime);
+            inputManager->processInput(window.get(), deltaTime);
 
-            shaderProgram->set_mat4("uView", camera.getViewMatrix());
+            shaderProgram->set_mat4("uView", camera->getViewMatrix());
 
             // draw objects
-            for (auto& obj : objects) {
+            for (auto &obj: objects) {
                 drawObject(obj, vbo, vao);
             }
 
@@ -70,7 +72,7 @@ namespace Graphics {
 
     void OpenGlEngine2D::initEngine() {
         // setup input manager
-        inputManager = createInputManager();
+        configInputManager();
 
         // set shader program
         shaderProgram = std::make_unique<ShaderProgram>(createShaderProgram());
@@ -85,8 +87,8 @@ namespace Graphics {
         initVertexArrays();
     }
 
-    Input::InputManagerOpenGl OpenGlEngine2D::createInputManager() {
-        glfwSetWindowUserPointer(window.get(), &inputManager);
+    void OpenGlEngine2D::configInputManager() {
+        glfwSetWindowUserPointer(window.get(), inputManager.get());
 
         glfwSetCursorPosCallback(window.get(), Input::InputManagerOpenGl::mouseCallbackWrapper);
         glfwSetScrollCallback(window.get(), Input::InputManagerOpenGl::scrollCallbackWrapper);
@@ -98,30 +100,25 @@ namespace Graphics {
         glfwSetInputMode(window.get(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
         // register camera-related input handlers
-        inputManager.registerKeyCallback(Input::KeyBinding::W, [&](float deltaTime) {
-            camera.moveVertical(100.0f * deltaTime);
+        inputManager->registerKeyCallback(Input::KeyBinding::S, [&](float deltaTime) {
+            camera->moveVertical(-100.0f * deltaTime);
         });
-        inputManager.registerKeyCallback(Input::KeyBinding::S, [&](float deltaTime) {
-            camera.moveVertical(-100.0f * deltaTime);
+        inputManager->registerKeyCallback(Input::KeyBinding::A, [&](float deltaTime) {
+            camera->moveHorizontal(-100.0f * deltaTime);
         });
-        inputManager.registerKeyCallback(Input::KeyBinding::A, [&](float deltaTime) {
-            camera.moveHorizontal(-100.0f * deltaTime);
-        });
-        inputManager.registerKeyCallback(Input::KeyBinding::D, [&](float deltaTime) {
-            camera.moveHorizontal(100.0f * deltaTime);
+        inputManager->registerKeyCallback(Input::KeyBinding::D, [&](float deltaTime) {
+            camera->moveHorizontal(100.0f * deltaTime);
         });
 
-        inputManager.registerKeyCallback(Input::KeyBinding::Escape, [&](float deltaTime) {
+        inputManager->registerKeyCallback(Input::KeyBinding::Escape, [&](float deltaTime) {
             glfwSetWindowShouldClose(window.get(), true);
         });
 
-        inputManager.registerMouseCallback([&](double xOffset, double yOffset) {
+        inputManager->registerMouseCallback([&](double xOffset, double yOffset) {
         });
 
-        inputManager.registerScrollCallback([&](double yOffset) {
+        inputManager->registerScrollCallback([&](double yOffset) {
         });
-
-        return inputManager;
     }
 
     void addVertexAttribute(int index, int size, GLenum type, bool normalized, int stride, const void *ptr) {
@@ -168,7 +165,7 @@ namespace Graphics {
         addVertexAttribute(1, 4, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *) (2 * sizeof(float)));
     }
 
-    void OpenGlEngine2D::drawObject(const Object2D& obj, const unsigned int vbo_, const unsigned int vao_) {
+    void OpenGlEngine2D::drawObject(const Object2D &obj, const unsigned int vbo_, const unsigned int vao_) {
         const auto pos = obj.getPosition();
         const auto rotation = obj.getRotation();
         const auto scale = obj.getScale();
@@ -190,7 +187,8 @@ namespace Graphics {
         glBindBuffer(GL_ARRAY_BUFFER, vbo_);
 
         // sending vertex data
-        glBufferData(GL_ARRAY_BUFFER, obj.getVertices().size() * sizeof(float), obj.getVertices().data(), GL_DYNAMIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, obj.getVertices().size() * sizeof(float), obj.getVertices().data(),
+                     GL_DYNAMIC_DRAW);
 
         // drawing
         glDrawArrays(GL_LINES, 0, 2);
@@ -202,12 +200,11 @@ namespace Graphics {
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
-    Camera2D &OpenGlEngine2D::getCamera() {
+    std::shared_ptr<Camera2D> OpenGlEngine2D::getCamera() {
         return camera;
     }
 
-    Input::InputManager &OpenGlEngine2D::getInputManager() {
+    std::shared_ptr<Input::InputManager> OpenGlEngine2D::getInputManager() {
         return inputManager;
     }
-
 }
