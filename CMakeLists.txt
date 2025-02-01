@@ -11,7 +11,9 @@ enable_testing()
 
 # add glad to the project
 add_library(glad libs/glad/src/glad.c
-        src/graphics/program/Epsilon.cpp)
+        src/graphics/program/Epsilon.cpp
+        src/graphics/engine/Screen.h
+        src/graphics/engine/FrameTime.h)
 target_include_directories(glad PUBLIC libs/glad/include)
 
 # add google test to the project

@@ -12,7 +12,7 @@
 #include "../OpenGlStatus.h"
 
 namespace Graphics {
-    OpenGlEngine::OpenGlEngine() : window(nullptr) {
+    OpenGlEngine::OpenGlEngine() : screen{SCR_WIDTH, SCR_HEIGHT}, frameTime{0.0f, 0.0f}, window(nullptr) {
         initEngine();
     }
 
@@ -38,7 +38,8 @@ namespace Graphics {
     }
 
     std::unique_ptr<GLFWwindow, GLFWWindowDeleter> OpenGlEngine::createWindow(int width, int height,
-                                     const std::string &windowTitle, GLFWmonitor *monitor) {
+                                                                              const std::string &windowTitle,
+                                                                              GLFWmonitor *monitor) {
         const auto rawWindow = glfwCreateWindow(width, height, windowTitle.c_str(), NULL, NULL);
         if (!rawWindow) {
             throw std::runtime_error("Failed to create GLFW window");

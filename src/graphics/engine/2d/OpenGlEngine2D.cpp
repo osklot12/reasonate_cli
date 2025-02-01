@@ -12,7 +12,7 @@
 #include "../input/InputManagerOpenGl.h"
 
 namespace Graphics {
-    OpenGlEngine2D::OpenGlEngine2D() : vbo(), vao(), deltaTime(0.0f), lastFrame(0.0f),
+    OpenGlEngine2D::OpenGlEngine2D() : vbo(), vao(),
                                        camera(std::make_shared<Cam2DOpenGl>()),
                                        inputManager(std::make_shared<Input::InputManagerOpenGl>()) {
         initEngine();
@@ -30,25 +30,23 @@ namespace Graphics {
         // activate shader
         shaderProgram->use();
 
-        const float screenWidth = 800.f;
-        const float screenHeight = 600.f;
         projectionMatrix = glm::ortho(
-            -screenWidth / 2.0f, screenWidth / 2.0f,
-            -screenHeight / 2.0f, screenHeight / 2.0f,
+            static_cast<float>(-screen.width) / 2.0f, static_cast<float>(screen.width) / 2.0f,
+            static_cast<float>(-screen.height) / 2.0f, static_cast<float>(screen.height) / 2.0f,
             -1.0f, 1.0f);
         shaderProgram->set_mat4("uProjection", projectionMatrix);
 
         // render loop
         while (!glfwWindowShouldClose(window.get())) {
             const auto currentFrame = static_cast<float>(glfwGetTime());
-            deltaTime = currentFrame - lastFrame;
-            lastFrame = currentFrame;
+            frameTime.deltaTime = currentFrame - frameTime.lastFrame;
+            frameTime.lastFrame = currentFrame;
 
             // render
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
             // process input
-            inputManager->processInput(window.get(), deltaTime);
+            inputManager->processInput(window.get(), frameTime.deltaTime);
 
             shaderProgram->set_mat4("uView", camera->getViewMatrix());
 
@@ -74,6 +72,9 @@ namespace Graphics {
         // setup input manager
         configInputManager();
 
+        // initializes framebuffer size callback
+        initFramebufferCallback();
+
         // set shader program
         shaderProgram = std::make_unique<ShaderProgram>(createShaderProgram());
 
@@ -87,16 +88,23 @@ namespace Graphics {
         initVertexArrays();
     }
 
+    void OpenGlEngine2D::initFramebufferCallback() {
+        glfwSetFramebufferSizeCallback(window.get(), [](GLFWwindow *window, int width, int height) {
+            auto engine = static_cast<OpenGlEngine2D *>(glfwGetWindowUserPointer(window));
+            if (engine) {
+                engine->screen.width = width;
+                engine->screen.height = height;
+            }
+        });
+    }
+
+
     void OpenGlEngine2D::configInputManager() {
         glfwSetWindowUserPointer(window.get(), inputManager.get());
 
         glfwSetCursorPosCallback(window.get(), Input::InputManagerOpenGl::mouseCallbackWrapper);
         glfwSetScrollCallback(window.get(), Input::InputManagerOpenGl::scrollCallbackWrapper);
 
-        // registering callback functions
-        glfwSetFramebufferSizeCallback(window.get(), [](GLFWwindow *window, const int width, const int height) {
-            glViewport(0, 0, width, height);
-        });
         glfwSetInputMode(window.get(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
         // register camera-related input handlers

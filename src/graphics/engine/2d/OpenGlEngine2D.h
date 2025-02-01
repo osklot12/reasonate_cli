@@ -10,6 +10,8 @@
 #include <memory>
 
 #include "Engine2D.h"
+#include "../FrameTime.h"
+#include "../Screen.h"
 #include "../../shader/ShaderProgram.h"
 #include "../camera/Cam2DOpenGl.h"
 #include "../base/OpenGlEngine.h"
@@ -41,6 +43,9 @@ namespace Graphics {
         // initializes the graphics engine
         void initEngine();
 
+        // initializes the framebuffer size callback
+        void initFramebufferCallback();
+
         // creates a shader program
         static ShaderProgram createShaderProgram();
 
@@ -64,19 +69,14 @@ namespace Graphics {
         // configures the input manager
         void configInputManager();
 
-        void drawObject(const Object2D &obj, const unsigned int vbo, const unsigned int vao);
+        // draws a graphical object
+        void drawObject(const Object2D &obj, unsigned int vbo, unsigned int vao);
 
         // shader program
         std::unique_ptr<ShaderProgram> shaderProgram;
 
         // vertex buffer object and vertex array object
         unsigned int vbo, vao;
-
-        // delta time
-        float deltaTime;
-
-        // last frame
-        float lastFrame;
 
         // camera
         std::shared_ptr<Cam2DOpenGl> camera;
@@ -88,7 +88,7 @@ namespace Graphics {
         static constexpr unsigned int SCR_WIDTH = 800;
         static constexpr unsigned int SCR_HEIGHT = 600;
 
-        // graphics objects active
+        // graphical objects
         std::vector<Object2D> objects;
 
         glm::mat4 projectionMatrix;

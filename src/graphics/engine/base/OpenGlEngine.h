@@ -10,6 +10,8 @@
 #include <thread>
 
 #include "Engine.h"
+#include "../FrameTime.h"
+#include "../Screen.h"
 #include "../../../input/InputManagerOpenGl.h"
 
 namespace Graphics {
@@ -28,8 +30,8 @@ namespace Graphics {
     constexpr int OPEN_GL_PROFILE = GLFW_OPENGL_CORE_PROFILE;
 
     // constants: window
-    constexpr int WINDOW_WIDTH = 800;
-    constexpr int WINDOW_HEIGHT = 600;
+    constexpr int SCR_WIDTH = 800;
+    constexpr int SCR_HEIGHT = 600;
     const std::string WINDOW_TITLE = "OpenGL Engine";
 
     // an opengl graphics engine base class
@@ -49,7 +51,7 @@ namespace Graphics {
         static void initOpenGl();
 
         // creates a new window
-        static std::unique_ptr<GLFWwindow, GLFWWindowDeleter> createWindow(int width = WINDOW_WIDTH, int height = WINDOW_HEIGHT,
+        static std::unique_ptr<GLFWwindow, GLFWWindowDeleter> createWindow(int width = SCR_WIDTH, int height = SCR_HEIGHT,
                                         const std::string &windowTitle = WINDOW_TITLE, GLFWmonitor *monitor = nullptr);
 
         // initializes glad
@@ -58,6 +60,12 @@ namespace Graphics {
         // configures opengl state
         static void configureOpenGlState();
     protected:
+        // the screen of graphical representation
+        Screen screen;
+
+        // data used for frame timing calculations
+        FrameTime frameTime;
+
         // window associated with the engine
         std::unique_ptr<GLFWwindow, GLFWWindowDeleter> window;
 
