@@ -24,16 +24,6 @@ namespace Graphics {
         }
     };
 
-    // constants: version
-    constexpr int OPENGL_VERSION_MAJOR = 3;
-    constexpr int OPENGL_VERSION_MINOR = 3;
-    constexpr int OPEN_GL_PROFILE = GLFW_OPENGL_CORE_PROFILE;
-
-    // constants: window
-    constexpr int SCR_WIDTH = 800;
-    constexpr int SCR_HEIGHT = 600;
-    const std::string WINDOW_TITLE = "OpenGL Engine";
-
     // an opengl graphics engine base class
     class OpenGlEngine {
     public:
@@ -74,6 +64,16 @@ namespace Graphics {
 
         // flag to control loop
         std::atomic<bool> running;
+
+        // constants: version
+        static constexpr int OPENGL_VERSION_MAJOR = 3;
+        static constexpr int OPENGL_VERSION_MINOR = 3;
+        static constexpr int OPEN_GL_PROFILE = GLFW_OPENGL_CORE_PROFILE;
+
+        // constants: window
+        static constexpr int SCR_WIDTH = 800;
+        static constexpr int SCR_HEIGHT = 600;
+        static constexpr auto WINDOW_TITLE = "OpenGL Engine";
     };
 }
 

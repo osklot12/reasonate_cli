@@ -10,8 +10,6 @@
 #include <memory>
 
 #include "Engine2D.h"
-#include "../FrameTime.h"
-#include "../Screen.h"
 #include "../../shader/ShaderProgram.h"
 #include "../camera/Cam2DOpenGl.h"
 #include "../base/OpenGlEngine.h"
@@ -92,6 +90,10 @@ namespace Graphics {
         std::vector<Object2D> objects;
 
         glm::mat4 projectionMatrix;
+
+        // shader sources
+        static constexpr auto V_SHADER_SOURCE = "../src/graphics/shader/shader_src/2d/shader.vs";
+        static constexpr auto F_SHADER_SOURCE = "../src/graphics/shader/shader_src/2d/shader.fs";
     };
 }
 

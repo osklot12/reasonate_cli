@@ -134,13 +134,10 @@ namespace Graphics {
     }
 
     ShaderProgram OpenGlEngine2D::createShaderProgram() {
-        const std::string VERTEX_CODE_PATH = "../src/graphics/shader/shader_src/2d/shader.vs";
-        const std::string FRAGMENT_CODE_PATH = "../src/graphics/shader/shader_src/2d/shader.fs";
-
         try {
             // create vertex and fragment shaders
-            const std::string vertexCode = FileUtil::read_file(VERTEX_CODE_PATH);
-            const std::string fragmentCode = FileUtil::read_file(FRAGMENT_CODE_PATH);
+            const std::string vertexCode = FileUtil::read_file(V_SHADER_SOURCE);
+            const std::string fragmentCode = FileUtil::read_file(F_SHADER_SOURCE);
 
             // build and compile shader program
             const Shader vertexShader(vertexCode, SHADER_TYPE::VERTEX);
